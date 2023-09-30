@@ -1,0 +1,16 @@
+{
+  "name": "teste02",
+  "module": "index.ts",
+  "type": "module",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "bun run src/main.ts",
+    "dev":"bun --bun --watch --inspect src/main.ts"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
