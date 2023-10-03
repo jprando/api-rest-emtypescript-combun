@@ -6,10 +6,10 @@ function gracefulShutdown(sinal: string) {
     const { app } = Contexto;
 
     Contexto.recusarNovasRequisicoes();
-    log(`#APP ${sinal} recebido, encerrando...\n`); // emNovaLinha
+    log(`#APP ${sinal} recebido, encerrando...\n`);
 
     while (app.pendingRequests) {
-      log(`#APP aguardando conclusao de ${app.pendingRequests} requisicoes\n`); // emNovaLinha
+      log(`#APP aguardando conclusao de ${app.pendingRequests} requisicoes\n`);
       await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
@@ -18,6 +18,6 @@ function gracefulShutdown(sinal: string) {
 }
 
 export function configurarGracefulShutdown() {
-  process.on("exit", () => log(`#APP encerrado!\n`, { emNovaLinha: true }));
+  process.on("exit", () => log(`#APP encerrado!\n`));
   ["SIGHUP", "SIGINT", "SIGTERM", "SIGKILL"].forEach(gracefulShutdown);
 }

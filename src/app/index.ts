@@ -15,13 +15,14 @@ export default {
 
     const inicio = performance.now();
     const { method, url: urlAtual } = req;
-    const rotulo = log(`${method} ${urlAtual}`); // emNovaLinha
+    const rotulo = log(`${method} ${urlAtual}`);
     let resposta = new Response("nao encontrado", { status: 404 });
 
     try {
       for (const item of endpoints) {
         const { endpoint, default: executar } = item;
         if (urlAtual !== `${baseUrl}${endpoint}`) continue;
+        // TODO verificar http.method
         resposta = await executar(req);
         break;
       }
@@ -29,7 +30,6 @@ export default {
       const fim = performance.now();
       log(`${method} ${urlAtual} | ${resposta.status}`, {
         rotulo,
-        emNovaLinha: true,
         velocidade: fim - inicio,
       });
     }
@@ -37,3 +37,9 @@ export default {
     return resposta;
   },
 };
+
+const rotulo = log("#APP endpoints:");
+for (const item of endpoints) {
+  log(item.endpoint, { rotulo });
+}
+

@@ -22,11 +22,10 @@ export class Contexto {
     return Contexto._app;
   }
   static set app(valor: Server) {
-    const { protocol = "http", hostname, port } = valor as any;
     Contexto._app = valor;
     configurarGracefulShutdown();
     Contexto._estaAceitandoRequisicao = true;
-    log(`#INFO aceitando requisicoes em ${this.baseUrl}\n`); // emNovaLinha
+    log(`#INFO aceitando requisicoes em ${this.baseUrl}\n`);
   }
   static get baseUrl() {
     const { protocol = "http", hostname, port } = Contexto._app as any;
