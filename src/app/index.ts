@@ -1,10 +1,11 @@
 import type { Requisicao } from "../tipos";
+import { log } from "../utils";
 import { Contexto } from "./Contexto";
 import endpoints from "./endpoints";
 
 export default {
   async fetch(req: Requisicao): Promise<Response> {
-    const { app, estaAceitandoRequisicao } = Contexto;
+    const { baseUrl, estaAceitandoRequisicao } = Contexto;
 
     if (!estaAceitandoRequisicao) {
       return new Response("nao esta aceitando novas requisicoes", {
@@ -12,16 +13,27 @@ export default {
       });
     }
 
-    req.app = app;
-    req.contexto = Contexto;
+    const inicio = performance.now();
+    const { method, url: urlAtual } = req;
+    const rotulo = log(`${method} ${urlAtual}`); // emNovaLinha
+    let resposta = new Response("nao encontrado", { status: 404 });
 
-    for (const _endpoint of endpoints) {
-      const resposta = await _endpoint(req);
-      if (resposta) {
-        return resposta;
+    try {
+      for (const item of endpoints) {
+        const { endpoint, default: executar } = item;
+        if (urlAtual !== `${baseUrl}${endpoint}`) continue;
+        resposta = await executar(req);
+        break;
       }
+    } finally {
+      const fim = performance.now();
+      log(`${method} ${urlAtual} | ${resposta.status}`, {
+        rotulo,
+        emNovaLinha: true,
+        velocidade: fim - inicio,
+      });
     }
 
-    return new Response("nao encontrado", { status: 404 });
+    return resposta;
   },
 };

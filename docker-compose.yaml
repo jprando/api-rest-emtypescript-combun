@@ -1,0 +1,39 @@
+services:
+
+## PRODUCAO ##
+
+  teste-bun:
+    profiles:
+      - "producao"
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM oven/bun:alpine
+        WORKDIR /srv/app
+        COPY . .
+        RUN bun install
+    environment:
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    stop_signal: SIGTERM
+    stop_grace_period: 5s
+    command: bun --bun --cwd /srv/app ./src/main.ts
+
+## DESENVOLVIMENTO ##
+
+  teste-bun-dev:
+    image: oven/bun:alpine
+    profiles:
+      - "desenvolvimento"
+    working_dir: /srv/app
+    volumes:
+      - ./:/srv/app
+    environment:
+      - PORT=3000
+    ports:
+      - "3000:3000"
+      - "6499:6499"
+    stop_signal: SIGTERM
+    stop_grace_period: 5s
+    command: bun --bun --cwd /srv/app --watch src/main.ts

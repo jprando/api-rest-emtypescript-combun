@@ -1,6 +1,6 @@
 import { log } from "./log";
 
 export function liberarMemoria() {
-    log("#INFO liberando memoria\n");
-    Bun.gc(true);
-  }
+  log("#INFO liberando memoria\n"); // emNovaLinha
+  Bun.gc(true);
+}

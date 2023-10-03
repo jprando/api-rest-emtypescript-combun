@@ -1,11 +1,15 @@
 {
-  "name": "teste02",
-  "module": "index.ts",
+  "name": "teste-bun",
   "type": "module",
-  "main": "src/main.ts",
+  "module": "./src/main.ts",
+  "main": "./src/main.ts",
   "scripts": {
     "start": "bun run src/main.ts",
-    "dev":"bun --bun --watch --inspect src/main.ts"
+    "dev": "bun --bun --watch --inspect ./src/main.ts",
+    "start:docker": "docker compose --profile producao up --force-recreate --build",
+    "dev:docker": "docker compose --profile desenvolvimento up --force-recreate --build",
+    "stop:docker": "docker compose --profile desenvolvimento --profile producao down",
+    "clear:docker": "docker system prune --all --force --volumes"
   },
   "devDependencies": {
     "bun-types": "latest"
